@@ -1,4 +1,4 @@
-package com.example.myalarm;
+package com.example.alarmclock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,16 +13,15 @@ import android.widget.TimePicker;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
     TimePicker alarmTime;
-
+    Random rand;
+    //int randomindex =0;
     public static int MY_VALUE = 4;
     public static String alarm_time = "";
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(" First Clicked");
                 alarmTime = findViewById(R.id.timePicker);
                 alarm_time = AlarmTime();
+                //randomindex = rand.nextInt(AlarmHub.words.size());
                 finish();
             }
         });

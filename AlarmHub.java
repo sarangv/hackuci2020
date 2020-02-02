@@ -1,4 +1,4 @@
-package com.example.myalarm;
+package com.example.alarmclock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -93,8 +93,17 @@ public class AlarmHub extends AppCompatActivity {
                     ArrayList result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     textView.setText((CharSequence) result.get(0));
+                    CharSequence word = (CharSequence) result.get(0);
+                    if (((String) word).equals(words.get(random_number)))
+                    {
+                        stopped = true;
+                    }
+                    else
+                    {
+                        stopped = false;
+                    }
                 }
-                break;
+                //break;
             }
         }
     }
@@ -118,7 +127,7 @@ public class AlarmHub extends AppCompatActivity {
                 System.out.println("Clicked");
                 stopped = false;
                 been_set = true;
-
+                random_number = random.nextInt(words.size());
                 startActivity(new Intent(AlarmHub.this, MainActivity.class));
             }
         });
