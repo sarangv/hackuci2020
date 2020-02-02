@@ -1,60 +1,87 @@
-package com.example.alarmclock;
+package com.example.myalarm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextClock;
+import android.widget.TimePicker;
 
-import android.content.ActivityNotFoundException;
-        import android.content.Intent;
-        import android.speech.RecognizerIntent;
-        import android.os.Bundle;
-        import android.view.View;
-        import android.widget.ImageView;
-        import android.widget.TextView;
-        import android.widget.Toast;
-        import java.util.ArrayList;
-        import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private final int REQ_CODE = 100;
-    TextView textView;
+
+    TimePicker alarmTime;
+
+    public static int MY_VALUE = 4;
+    public static String alarm_time = "";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.text);
-        ImageView speak = findViewById(R.id.speak);
-        speak.setOnClickListener(new View.OnClickListener() {
+
+        //configureRinger();
+        configureNextButton();
+    }
+
+    public TimePicker getAlarmTime()
+    {
+        return alarmTime;
+    }
+
+
+
+
+    public String AlarmTime()
+    {
+        Integer alarmHours = alarmTime.getCurrentHour();
+        Integer alarmMinutes = alarmTime.getCurrentMinute();
+        String stringAlarmMinutes;
+
+        if(alarmMinutes < 10)
+        {
+            stringAlarmMinutes = "0";
+            stringAlarmMinutes = stringAlarmMinutes.concat(alarmMinutes.toString());
+        }
+        else
+        {
+            stringAlarmMinutes = alarmMinutes.toString();
+        }
+
+        String stringAlarmTime;
+
+        if(alarmHours > 12)
+        {
+            alarmHours = alarmHours - 12;
+            stringAlarmTime = alarmHours.toString().concat(":").concat(stringAlarmMinutes).concat(" PM");
+        }
+        else
+        {
+            stringAlarmTime = alarmHours.toString().concat(":").concat(stringAlarmMinutes).concat(" AM");
+        }
+
+        return stringAlarmTime;
+    }
+
+    private void configureNextButton()
+    {
+        Button nextButton = (Button) findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Need to speak");
-                try {
-                    startActivityForResult(intent, REQ_CODE);
-                } catch (ActivityNotFoundException a) {
-                    Toast.makeText(getApplicationContext(),
-                            "Sorry your device not supported",
-                            Toast.LENGTH_SHORT).show();
-                }
+                System.out.println(" First Clicked");
+                alarmTime = findViewById(R.id.timePicker);
+                alarm_time = AlarmTime();
+                finish();
             }
         });
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQ_CODE: {
-                if (resultCode == RESULT_OK && null != data) {
-                    ArrayList result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    textView.setText((CharSequence) result.get(0));
-                }
-                break;
-            }
-        }
     }
 }
