@@ -24,8 +24,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,6 +39,14 @@ public class AlarmHub extends AppCompatActivity {
     Boolean been_set = false;
     private final int REQ_CODE = 100;
     TextView textView;
+    TextView defText;
+
+    public static List<String> words = Arrays.asList("abstract", "aesthetic", "timorous");
+    public static List<String> defs = Arrays.asList("not representing or imitating external reality or the objects of nature", "having to do with the appreciation of beauty", "timid; fearful");
+
+    Random random = new Random();
+    int random_number = random.nextInt(3);
+
 
 
 
@@ -44,6 +55,7 @@ public class AlarmHub extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_hub);
         textView = findViewById(R.id.text);
+        defText = findViewById(R.id.defText);
 
         //Button speak = findViewById(R.id.backButton);
         configureBackButton();
@@ -120,6 +132,7 @@ public class AlarmHub extends AppCompatActivity {
             public void onClick(View v) {
                 stopped = true;
                 stopTone(r);
+                defText.setText((CharSequence) defs.get(random_number));
 
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -128,7 +141,7 @@ public class AlarmHub extends AppCompatActivity {
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Need to speak");
 
                 try {
-
+                    System.out.println("speak to this");
                     startActivityForResult(intent, REQ_CODE);
 
                 } catch (ActivityNotFoundException a) {
